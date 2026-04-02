@@ -1,0 +1,46 @@
+
+---
+title: "HW6 - Data Visualization"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# Load necessary libraries
+library(ggplot2)
+library(tidyr)
+
+# Load the dataset
+load("C:/Users/Lenovo/Downloads/house_prices.rda")
+```
+
+## Line Plot of House Price Index
+
+```{r}
+# Create a line plot to show trends for house_price_index by state
+ggplot(house_prices, aes(x = date, y = house_price_index)) +
+  geom_line() +  # Create line plot
+  facet_wrap(~ state) +  # Facet by state
+  scale_x_continuous(breaks = c(1980, 2000, 2020), labels = c("'80", "'00", "'20"))  # Set custom x-axis labels
+```
+
+### Reshaping Data with `gather()`
+
+```{r}
+# Reshape the data using gather() to create a long-format dataset with 'measure' and 'value' columns
+house_reshaped <- gather(house_prices, key = "measure", value = "value", house_price_index, unemploy_perc)
+
+# View the reshaped data (optional)
+head(house_reshaped)
+```
+
+### Line Plot for Reshaped Data
+
+```{r}
+# Create a line plot for house_price_index and unemploy_perc over the years for each state
+ggplot(house_reshaped, aes(x = date, y = value, color = measure)) +
+  geom_line() +  # Create line plot
+  facet_wrap(~ state) +  # Facet by state
+  scale_x_continuous(breaks = c(1980, 2000, 2020), labels = c("'80", "'00", "'20")) +  # Set custom x-axis labels
+  labs(title = "House Price Index vs Unemployment Percentage Over the Years by State", 
+       y = "Value", x = "Year")  # Add title and labels
+```
